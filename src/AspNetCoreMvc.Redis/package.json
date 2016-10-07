@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net-core-redis-sample",
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^1.11.1",
+    "font-awesome": "^4.6.3"
+  }
+}

@@ -1,4 +1,14 @@
-﻿<hgroup>
-    <h1>Index</h1>
-    <h3>@ViewBag.Message</h3>
-</hgroup>
+﻿@model IEnumerable<User>
+<h2>Latest users added</h2>
+
+@if (Model != null && Model.Any())
+{
+}
+else
+{
+    <div class="well">
+        No users
+    </div>
+}
+
+

@@ -3,11 +3,37 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="~/libs/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/libs/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/libs/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <title>@ViewBag.Title</title>
 </head>
 <body>
-    <div>
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a asp-controller="Home" asp-action="Index">Users List</a></li>
+                        <li><a asp-controller="User" asp-action="Index">Add Users</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
         @RenderBody()
     </div>
+    <script src="~/libs/jquery/dist/jquery.js"></script>
+    <script src="~/libs/bootstrap/dist/js/bootstrap.js"></script>
 </body>
 </html>
