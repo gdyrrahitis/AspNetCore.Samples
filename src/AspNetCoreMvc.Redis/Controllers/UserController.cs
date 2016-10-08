@@ -10,10 +10,9 @@
     {
         private readonly IDatabase _db;
 
-        public UserController()
+        public UserController(IDatabase database)
         {
-            var redis = ConnectionMultiplexer.Connect("localhost");
-            _db = redis.GetDatabase(0);
+            _db = database;
         }
 
         [HttpGet]

@@ -9,10 +9,9 @@
     {
         private readonly IDatabase _db;
 
-        public HomeController()
+        public HomeController(IDatabase database)
         {
-            var redis = ConnectionMultiplexer.Connect("localhost");
-            _db = redis.GetDatabase(0);
+            _db = database;
         }
 
         // GET /home/

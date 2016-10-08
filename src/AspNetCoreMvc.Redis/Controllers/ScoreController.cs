@@ -12,17 +12,16 @@
     {
         private readonly IDatabase _db;
 
-        public ScoreController()
+        public ScoreController(IDatabase database)
         {
-            var redis = ConnectionMultiplexer.Connect("localhost");
-            _db = redis.GetDatabase(0);
+            _db = database;
         }
 
         // GET: /Score/
         public IActionResult Index()
         {
             var users = _db.SortedSetRangeByScoreWithScores("highscores", order: Order.Descending)
-                .SelectUsersByScoreStrongTypeForUser((S) => JsonConvert.DeserializeObject<User>(_db.StringGet(s.Element.ToString())));
+                .SelectUsersByScoreStrongTypeForUser((s) => JsonConvert.DeserializeObject<User>(_db.StringGet(s.Element.ToString())));
             return View(users);
         }
 

@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using StackExchange.Redis;
 
     public class Startup
     {
@@ -11,6 +12,15 @@
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IConnectionMultiplexer, ConnectionMultiplexer>((f) =>
+            {
+                return ConnectionMultiplexer.Connect("localhost");
+            });
+            services.AddScoped<IDatabase>((f) => {
+                var connectionMultiplexerService = f.GetService<IConnectionMultiplexer>();
+                return connectionMultiplexerService.GetDatabase(0);
+            });
+
             // Adds MVC to the pipeline
             services.AddMvc();
         }
@@ -27,7 +37,8 @@
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes => {
+            app.UseMvc(routes =>
+            {
                 routes.MapRoute("Default", "{controller}/{action}/{id:guid?}", new { controller = "Home", action = "Index" });
             });
         }
