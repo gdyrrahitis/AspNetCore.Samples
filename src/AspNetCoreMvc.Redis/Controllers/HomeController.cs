@@ -4,7 +4,6 @@
     using Models;
     using Newtonsoft.Json;
     using StackExchange.Redis;
-    using System;
 
     public class HomeController : Controller
     {

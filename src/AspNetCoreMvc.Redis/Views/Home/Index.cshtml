@@ -1,6 +1,6 @@
 ﻿@{
-    var users = (ViewBag.Users as IEnumerable<AspNetCoreMvc.Redis.ViewModels.UserCreatedViewModel>).ToList();
-    var scores = (ViewBag.Scores as IEnumerable<AspNetCoreMvc.Redis.ViewModels.HighscoreViewModel>).ToList();
+    var users = (ViewBag.Users as IEnumerable<UserCreatedViewModel>).ToList();
+    var scores = (ViewBag.Scores as IEnumerable<HighscoreViewModel>).ToList();
 }
 <div class="row">
     <div class="col-md-6">
