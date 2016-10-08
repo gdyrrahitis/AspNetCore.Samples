@@ -1,18 +1,31 @@
 ﻿@{
-    var users = ViewBag.Users as IEnumerable<AspNetCoreMvc.Redis.ViewModels.UserCreatedViewModel>;
-    var scores = ViewBag.Scores as IEnumerable<AspNetCoreMvc.Redis.ViewModels.HighscoreViewModel>;
+    var users = (ViewBag.Users as IEnumerable<AspNetCoreMvc.Redis.ViewModels.UserCreatedViewModel>).ToList();
+    var scores = (ViewBag.Scores as IEnumerable<AspNetCoreMvc.Redis.ViewModels.HighscoreViewModel>).ToList();
 }
 <div class="row">
     <div class="col-md-6">
-        <h2>Latest users added (top 5)</h2>
+        <h2>Latest users added (Top 5)</h2>
         @if (users.Any())
         {
-            <ol>
-                @foreach (var item in users)
-                {
-                    <li>@string.Format("{0} {1} @{2}", item.FirstName, item.LastName, item.CreatedOn)</li>
-                }
-            </ol>
+            <table class="table table-bordered table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Date Created</th>
+                    </tr>
+                    @for (var i = 0; i < users.Count; i++)
+                    {
+                        <tr>
+
+                            <td>@(i + 1)</td>
+                            <td>@users[i].FirstName @users[i].LastName</td>
+                            <td>@users[i].CreatedOn</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
         else
         {
@@ -22,15 +35,28 @@
         }
     </div>
     <div class="col-md-6">
-        <h2>Highscores (top 5)</h2>
+        <h2>Highscores (Top 5)</h2>
         @if (scores.Any())
         {
-            <ol>
-                @foreach (var item in scores)
-                {
-                    <li>@string.Format("{0} {1} @{2}", item.FirstName, item.LastName, item.Score)</li>
-                }
-            </ol>
+            <table class="table table-bordered table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                    @for (var i = 0; i < scores.Count; i++)
+                    {
+                        <tr>
+
+                            <td>@(i + 1)</td>
+                            <td>@scores[i].FirstName @scores[i].LastName</td>
+                            <td>@scores[i].Score</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
         else
         {
