@@ -22,18 +22,7 @@
         public IActionResult Index()
         {
             var users = _db.SortedSetRangeByScoreWithScores("highscores", order: Order.Descending)
-                        .Select(s =>
-                        {
-                            if (s.Element.IsNullOrEmpty) return null;
-                            var user = JsonConvert.DeserializeObject<User>(_db.StringGet(s.Element.ToString()));
-                            return new HighscoreViewModel
-                            {
-                                Id = user.Id.ToString(),
-                                FirstName = user.FirstName,
-                                LastName = user.LastName,
-                                Score = Convert.ToInt32(s.Score)
-                            };
-                        });
+                .SelectUsersByScoreStrongTypeForUser((S) => JsonConvert.DeserializeObject<User>(_db.StringGet(s.Element.ToString())));
             return View(users);
         }
 
