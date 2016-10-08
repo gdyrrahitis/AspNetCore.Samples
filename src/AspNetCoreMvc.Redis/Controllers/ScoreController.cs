@@ -10,30 +10,30 @@
 
     public class ScoreController : Controller
     {
-        private bool disposed = false;
-        private readonly ConnectionMultiplexer _redis;
         private readonly IDatabase _db;
 
         public ScoreController()
         {
-            _redis = ConnectionMultiplexer.Connect("localhost");
-            _db = _redis.GetDatabase(0);
+            var redis = ConnectionMultiplexer.Connect("localhost");
+            _db = redis.GetDatabase(0);
         }
 
         // GET: /Score/
         public IActionResult Index()
         {
-            var users = _db.SortedSetRangeByRankWithScores("users")
-                .Select(s =>
-                {
-                    var user = JsonConvert.DeserializeObject<User>(s.Element.ToString());
-                    return new HighscoreViewModel
-                    {
-                        Id = user.Id.ToString(),
-                        FirstName = user.FirstName,
-                        LastName = user.LastName
-                    };
-                });
+            var users = _db.SortedSetRangeByScoreWithScores("highscores", order: Order.Descending)
+                        .Select(s =>
+                        {
+                            if (s.Element.IsNullOrEmpty) return null;
+                            var user = JsonConvert.DeserializeObject<User>(_db.StringGet(s.Element.ToString()));
+                            return new HighscoreViewModel
+                            {
+                                Id = user.Id.ToString(),
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
+                                Score = Convert.ToInt32(s.Score)
+                            };
+                        });
             return View(users);
         }
 
@@ -44,27 +44,12 @@
             var user = _db.SortedSetScan("highscores", $"*{id}*").FirstOrDefault();
             if (user.Element.IsNullOrEmpty) return BadRequest();
 
-            _db.SortedSetAdd("highscores", user.Element, user.Score + 1);
-            return Json(JsonConvert.DeserializeObject<User>(user.Element.ToString()));
-        }
+            var newScore = user.Score + 1;
+            _db.SortedSetAdd("highscores", user.Element, newScore);
 
-        public new void Dispose()
-        {
-            // Dispose of unmanaged resources.
-            Dispose(true);
-            // Suppress finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _redis.Dispose();
-            }
-
-            disposed = true;
-            base.Dispose(disposing);
+            var entity = JsonConvert.DeserializeObject<HighscoreViewModel>(_db.StringGet(user.Element.ToString()));
+            entity.Score = Convert.ToInt32(newScore);
+            return Json(entity);
         }
     }
 }

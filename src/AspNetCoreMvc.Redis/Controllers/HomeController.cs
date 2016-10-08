@@ -10,8 +10,6 @@
 
     public class HomeController : Controller
     {
-        private bool disposed = false;
-        private readonly ConnectionMultiplexer _redis;
         private readonly IDatabase _db;
 
         public HomeController()
@@ -24,18 +22,22 @@
         public IActionResult Index()
         {
             var users = _db.SortedSetRangeByScore("users", take: 5, order: Order.Descending)
-                .Select(s => JsonConvert.DeserializeObject<User>(s.ToString()))
-                .Select(s => new UserCreatedViewModel
-                {
-                    FirstName = s.FirstName,
-                    LastName = s.LastName,
-                    CreatedOn = s.CreatedOn
+                .Select(s => {
+                    if (s.IsNullOrEmpty) return null;
+                    var user = JsonConvert.DeserializeObject<User>(_db.StringGet(s.ToString()));
+                    return new UserCreatedViewModel
+                    {
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        CreatedOn = user.CreatedOn
+                    };
                 });
 
             var scores = _db.SortedSetRangeByScoreWithScores("highscores", take: 5, order: Order.Descending)
                         .Select(s =>
                         {
-                            var user = JsonConvert.DeserializeObject<User>(s.ToString());
+                            if (s.Element.IsNullOrEmpty) return null;
+                            var user = JsonConvert.DeserializeObject<User>(_db.StringGet(s.Element.ToString()));
                             return new HighscoreViewModel
                             {
                                 FirstName = user.FirstName,
@@ -47,25 +49,6 @@
             ViewBag.Users = users;
             ViewBag.Scores = scores;
             return View();
-        }
-
-        public new void Dispose()
-        {
-            // Dispose of unmanaged resources.
-            Dispose(true);
-            // Suppress finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _redis.Dispose();
-            }
-
-            disposed = true;
-            base.Dispose(disposing);
         }
     }
 }
