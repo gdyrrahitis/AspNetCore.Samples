@@ -18,6 +18,7 @@
                 var user = predicate(s);
                 return new HighscoreViewModel
                 {
+                    Id = user.Id.ToString(),
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Score = Convert.ToInt32(s.Score)

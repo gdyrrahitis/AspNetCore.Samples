@@ -1,0 +1,30 @@
+﻿@model IList<HighscoreViewModel>
+
+<h2>Highscores (Top 5)</h2>
+@if (Model.Any())
+{
+    <table class="table table-bordered table-hover table-striped">
+        <tbody>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
+            @for (var i = 0; i < Model.Count; i++)
+                {
+                <tr>
+
+                    <td>@(i + 1)</td>
+                    <td>@Model[i].FirstName @Model[i].LastName</td>
+                    <td>@Model[i].Score</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="well">
+        No users
+    </div>
+}

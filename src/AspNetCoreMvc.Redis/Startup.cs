@@ -16,7 +16,8 @@
             {
                 return ConnectionMultiplexer.Connect("localhost");
             });
-            services.AddScoped<IDatabase>((f) => {
+
+            services.AddScoped((f) => {
                 var connectionMultiplexerService = f.GetService<IConnectionMultiplexer>();
                 return connectionMultiplexerService.GetDatabase(0);
             });
