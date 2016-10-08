@@ -10,3 +10,10 @@ Users are persisted as single entities, tracked by their key. Additionally, two 
 
 ### Usage
 Redis cache with ASP.NET Core, Core dependency injection, ViewComponents, Routing, Static files.
+
+# Download
+Clone repository `https://github.com/gdyrrahitis/AspNetCore.Samples.git` on your desktop.
+
+Make sure you have downloaded Redis for windows. If not, go [here](https://github.com/MSOpenTech/redis) and download redis. To run a redis server, go to `%programfiles%/Redis` and run the `redis-cli.exe`.
+
+Then run the application.
