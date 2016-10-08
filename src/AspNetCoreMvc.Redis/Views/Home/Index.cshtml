@@ -1,21 +1,42 @@
-﻿@using System.Runtime.InteropServices
-@model IEnumerable<StackExchange.Redis.RedisValue>
-<h2>Latest users added</h2>
-
-@if (Model != null && Model.Any())
-{
-    <ul>
-        @foreach (var item in Model)
+﻿@{
+    var users = ViewBag.Users as IEnumerable<AspNetCoreMvc.Redis.ViewModels.UserCreatedViewModel>;
+    var scores = ViewBag.Scores as IEnumerable<AspNetCoreMvc.Redis.ViewModels.HighscoreViewModel>;
+}
+<div class="row">
+    <div class="col-md-6">
+        <h2>Latest users added (top 5)</h2>
+        @if (users.Any())
         {
-            <li>@item</li>
+            <ol>
+                @foreach (var item in users)
+                {
+                    <li>@string.Format("{0} {1} @{2}", item.FirstName, item.LastName, item.CreatedOn)</li>
+                }
+            </ol>
         }
-    </ul>
-}
-else
-{
-    <div class="well">
-        No users
+        else
+        {
+            <div class="well">
+                No users
+            </div>
+        }
     </div>
-}
-
-
+    <div class="col-md-6">
+        <h2>Highscores (top 5)</h2>
+        @if (scores.Any())
+        {
+            <ol>
+                @foreach (var item in scores)
+                {
+                    <li>@string.Format("{0} {1} @{2}", item.FirstName, item.LastName, item.Score)</li>
+                }
+            </ol>
+        }
+        else
+        {
+            <div class="well">
+                No users
+            </div>
+        }
+    </div>
+</div>

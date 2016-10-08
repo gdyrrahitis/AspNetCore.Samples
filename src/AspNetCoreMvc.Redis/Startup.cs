@@ -26,7 +26,10 @@
             }
 
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+
+            app.UseMvc(routes => {
+                routes.MapRoute("Default", "{controller}/{action}/{id:guid?}", new { controller = "Home", action = "Index" });
+            });
         }
     }
 }

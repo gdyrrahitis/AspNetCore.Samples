@@ -25,6 +25,7 @@
                     <ul class="nav navbar-nav">
                         <li><a asp-controller="Home" asp-action="Index">Users List</a></li>
                         <li><a asp-controller="User" asp-action="Index">Add Users</a></li>
+                        <li><a asp-controller="Score" asp-action="Index">Update Scores</a></li>
                     </ul>
                 </div>
             </div>
@@ -35,5 +36,6 @@
     </div>
     <script src="~/libs/jquery/dist/jquery.js"></script>
     <script src="~/libs/bootstrap/dist/js/bootstrap.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

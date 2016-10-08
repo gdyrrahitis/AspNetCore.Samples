@@ -9,11 +9,13 @@
     public class UserController: Controller
     {
         private readonly IDatabase _db;
+        private ConnectionMultiplexer _redis;
+        private bool disposed = false;
 
         public UserController()
         {
-            var redis = ConnectionMultiplexer.Connect("localhost");
-            _db = redis.GetDatabase(0);
+            _redis = ConnectionMultiplexer.Connect("localhost");
+            _db = _redis.GetDatabase(0);
         }
 
         [HttpGet]
@@ -27,11 +29,31 @@
         {
             user.Id = Guid.NewGuid();
             user.CreatedOn = DateTime.UtcNow;
+            var userId = user.Id.ToString();
 
-            // Persist to REDIS cache
-            _db.SortedSetAdd("users", JsonConvert.SerializeObject(user), user.CreatedOn.Ticks);
+            _db.StringSet(userId, JsonConvert.SerializeObject(user));
+            _db.SortedSetAdd("users", userId, user.CreatedOn.Ticks);
+            _db.SortedSetAdd("highscores", userId, 0);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public new void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) {
+                _redis.Dispose();
+            }
+
+            disposed = true;
+            base.Dispose(disposing);
         }
     }
 }
