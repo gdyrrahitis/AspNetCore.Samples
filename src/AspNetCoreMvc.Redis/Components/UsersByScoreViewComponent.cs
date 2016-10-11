@@ -9,7 +9,7 @@
 
     public class UsersByScoreViewComponent : ViewComponent
     {
-        private IDatabase _db { get; set; }
+        private readonly IDatabase _db;
 
         public UsersByScoreViewComponent(IDatabase db)
         {

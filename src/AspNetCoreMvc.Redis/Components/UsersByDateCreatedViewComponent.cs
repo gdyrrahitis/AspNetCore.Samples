@@ -9,7 +9,7 @@
 
     public class UsersByDateCreatedViewComponent : ViewComponent
     {
-        public IDatabase _db { get; set; }
+        private readonly IDatabase _db;
 
         public UsersByDateCreatedViewComponent(IDatabase db)
         {
