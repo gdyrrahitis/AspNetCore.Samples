@@ -1,4 +1,5 @@
-﻿namespace AspNetCoreMvc.Redis
+﻿ // ReSharper disable once CheckNamespace
+namespace AspNetCoreMvc.Redis
 {
     using Models;
     using StackExchange.Redis;
