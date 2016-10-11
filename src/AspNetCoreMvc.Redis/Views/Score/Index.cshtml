@@ -31,20 +31,22 @@
         }
 
         function fail(error) {
-            console.error(error);
+            console.log(error);
         }
 
-        $(document).ready(function() {
-            $(".btn-score-add").on("click", function (evt) {
-                evt.preventDefault();
+        function scoreClickHandler(evt) {
+            evt.preventDefault();
 
-                var id = $(this).parent("li").attr("id");
+            var id = $(this).parent("li").attr("id");
 
-                $.ajax("/score/index/" + id, {
-                    method: "POST",
-                    accept: "application/json"
-                }).then(increment, fail);
-            });
+            $.ajax("/score/index/" + id, {
+                method: "POST",
+                accept: "application/json"
+            }).then(increment, fail);
+        }
+
+        $(document).ready(function () {
+            $(".btn-score-add").on("click", scoreClickHandler);
         });
     </script>
 }
