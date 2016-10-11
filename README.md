@@ -38,6 +38,19 @@ ZADD highscores 5 "00000000-0000-0000-0000-000000000000"
 
 Leaderboards are shown in homepage `http://localhost:<port>/` using template components
 
+Data is fetched by `ZRANGE` command of Redis, taking maximum up to five top entries in descenting order. Based on the need, data are fetched with or without associated score.
+
+**Examples**
+```
+// Getting top 5 entries from `users` sorted set, in descenting order
+_db.SortedSetRangeByScore("users", take: 5, order: Order.Descending);
+
+// Getting top 5 entries from `highscores` sorted set, in descenting order
+_db.SortedSetRangeByScoreWithScores("highscores", take: 5, order: Order.Descending)
+```
+
+**Component invocation**
+
 ```
 <div class="row">
     <div class="col-md-6">
